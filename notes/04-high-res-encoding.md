@@ -56,7 +56,7 @@ Result reported in the paper: supports 672×1088 images (6× more pixels than LL
 The takeaway for your internship: **encoder-side compression + smarter slicing is a real lever; this paper is one of the cleanest demonstrations.**
 
 - **Primary:** [LLaVA-UHD v3 README (slicing + compression overview)](https://github.com/thunlp/LLaVA-UHD) — short, with figures.
-- **Go deeper:** Xu et al., *LLaVA-UHD*, ECCV 2024 — [arXiv:2403.11703](https://arxiv.org/abs/2403.11703). Pay attention to §3 (image modularization) and §4 (compression module).
+- **Go deeper:** Xu et al., *LLaVA-UHD*, ECCV 2024 — [arXiv:2403.11703](https://arxiv.org/abs/2403.11703). **Skim path:** §3 (image modularization — how adaptive slicing chooses a partition) + §4 (compression module — the connector-side compressor that condenses tokens) + Figure 3 (the slicing layout). The whole paper is three good ideas; you only need to know the *what*, not the proofs.
 
 ### 3. FastVLM — change the encoder, not the connector
 
@@ -71,7 +71,7 @@ Key ideas:
 For brainstorming (goal #2): FastVLM stakes out one extreme — push compression into the encoder. The reading-list papers in Module 07 mostly stake out the other — keep the encoder, compress later. The synthesis ("efficient encoder *and* late-stage reducer") is a candidate research direction.
 
 - **Primary:** [Apple ML Research — FastVLM (project page)](https://machinelearning.apple.com/research/fast-vision-language-models) — short with figures.
-- **Go deeper:** Vasu et al., *FastVLM*, CVPR 2025 — [arXiv:2412.13303](https://arxiv.org/abs/2412.13303). Read §3 (architecture) and §5 (ablations).
+- **Go deeper:** Vasu et al., *FastVLM*, CVPR 2025 — [arXiv:2412.13303](https://arxiv.org/abs/2412.13303). **Skim path:** §3 (FastViTHD architecture — the hybrid conv+transformer encoder) + §5 (ablations — esp. the "scaling input resolution beats token pruning" experiment, which is the paper's whole argument). Skip the on-device deployment specifics unless you care about mobile.
 
 ## Putting it together
 

@@ -24,7 +24,8 @@ If a day slips, drop Module 08 first (it's the lightest) — the time goes to Mo
 |---|-------|------|--------|
 | 00 | Orientation & token-reduction taxonomy | [`notes/00-orientation.md`](./notes/00-orientation.md) | ~1 hr |
 | 01 | Modern LLM internals (KV cache, RoPE, FlashAttn) | [`notes/01-llm-internals.md`](./notes/01-llm-internals.md) | ~3 hrs |
-| 02 | Vision encoders for VLMs (ViT recap, CLIP, SigLIP) | [`notes/02-vision-encoders.md`](./notes/02-vision-encoders.md) | ~3 hrs |
+| 01b | Training pipelines (pre-train, SFT, RLHF, DPO, GRPO) | [`notes/01b-training-pipelines.md`](./notes/01b-training-pipelines.md) | ~3 hrs |
+| 02 | Vision encoders for VLMs (ViT recap, CLIP, SigLIP) | [`notes/02-vision-encoders.md`](./notes/02-vision-encoders.md) | ~2 hrs |
 | 03 | VLM architectures (LLaVA / BLIP-2 / Qwen-VL; projectors) | [`notes/03-vlm-architectures.md`](./notes/03-vlm-architectures.md) | ~5 hrs |
 | 04 | High-resolution visual encoding (AnyRes, LLaVA-UHD, FastVLM) | [`notes/04-high-res-encoding.md`](./notes/04-high-res-encoding.md) | ~4 hrs |
 | 05 | Video VLMs (frame sampling, token explosion) | [`notes/05-video-vlms.md`](./notes/05-video-vlms.md) | ~3 hrs |
@@ -42,8 +43,8 @@ Modules **01, 03, 06** each contain a ~30-line PyTorch code exercise. The rest a
 |------|---------|-----|
 | **May 16 (Sat)** | 00 Orientation | Mental map of the field — placing every paper in a bucket before you read any of them. |
 | **May 17 (Sun)** | 01 LLM internals | KV cache is the *reason* token reduction matters. Get this right and every other module is easier. |
-| **May 18 (Mon)** | 02 Vision encoders (part 1: ViT + CLIP) | Refresh what you know; nail down what's still fuzzy. |
-| **May 19 (Tue)** | 02 Vision encoders (part 2: SigLIP family) | Sigmoid loss is small but appears in nearly every modern open VLM. |
+| **May 18 (Mon)** | 01b Training pipelines | Pre-train → SFT → RLHF/DPO/GRPO. Every paper assumes you know this stack — fastest single ROI for the next two weeks. |
+| **May 19 (Tue)** | 02 Vision encoders (ViT recap + CLIP + SigLIP) | You already know ViT/CLIP basics; this is one day to pick up SigLIP's sigmoid loss and the family lineage. |
 | **May 20 (Wed)** | 03 VLM architectures (part 1: projectors + MLP/Q-Former/cross-attn) | The *connector* is where most token-reduction methods will live. |
 | **May 21 (Thu)** | 03 VLM architectures (part 2: LLaVA family) | LLaVA is the modal-default of the open VLM world. |
 | **May 22 (Fri)** | 03 VLM architectures (part 3: Qwen-VL family + BLIP-2/InternVL) | Lineage view: what changed and why between versions. |
@@ -64,6 +65,7 @@ Modules **01, 03, 06** each contain a ~30-line PyTorch code exercise. The rest a
 Modules:
 - [ ] 00 Orientation
 - [ ] 01 LLM internals
+- [ ] 01b Training pipelines
 - [ ] 02 Vision encoders
 - [ ] 03 VLM architectures
 - [ ] 04 High-res encoding

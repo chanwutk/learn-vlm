@@ -27,7 +27,7 @@ You know the picture: two encoders (image, text), contrastive loss pulls matchin
 - "ViT-L/14 @ 336px" (576 tokens) is the default of the LLaVA family — note the token count; it's the baseline for Module 04's high-res story.
 
 - **Primary:** [Samuel Albanie — CLIP digest](https://samuelalbanie.com/digests/2022-04-clip/) — concise paper digest plus video pointer.
-- **Go deeper:** Radford et al., *Learning Transferable Visual Models From Natural Language Supervision*, ICML 2021 — [arXiv:2103.00020](https://arxiv.org/abs/2103.00020).
+- **Go deeper:** Radford et al., *Learning Transferable Visual Models From Natural Language Supervision*, ICML 2021 — [arXiv:2103.00020](https://arxiv.org/abs/2103.00020). **Skim path:** §2 (Approach — esp. 2.1 contrastive objective and 2.2 model design) + Figure 1 + §3.1 (zero-shot transfer setup). The paper is long; everything after §3 is ablations and per-task results — skip on first pass.
 
 ### 3. SigLIP — the open default encoder
 
@@ -43,7 +43,7 @@ In the SigLIP-family lineage:
 **Why this is in the *high-resolution* section of `SUGGESTED_READINGS.md`:** SigLIP scales cleanly to variable input resolution because the loss is not normalized per-batch — a key enabler for the AnyRes-style high-res encoders you'll meet in Module 04.
 
 - **Primary:** [CLIP to SigLIP — Ritwik Raha blog](https://blog.ritwikraha.dev/choosing-between-siglip-and-clip-for-language-image-pretraining) — short side-by-side comparison.
-- **Go deeper:** Zhai et al., *Sigmoid Loss for Language Image Pre-Training*, 2023 — [arXiv:2303.15343](https://arxiv.org/abs/2303.15343). Especially §3 (the loss derivation) and §4.2 (batch-size scaling).
+- **Go deeper:** Zhai et al., *Sigmoid Loss for Language Image Pre-Training*, 2023 — [arXiv:2303.15343](https://arxiv.org/abs/2303.15343). **Skim path:** §3 (the loss derivation, one page) + Figure 1 (sigmoid vs softmax setup) + §4.2 (batch-size scaling). Skip the multilingual experiments unless they're directly relevant.
 
 ## Self-check
 

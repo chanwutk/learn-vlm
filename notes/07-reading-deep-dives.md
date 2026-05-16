@@ -20,6 +20,8 @@ For each paper, the spine is **problem → key idea → method → results → w
 
 **Bucket (from Module 00):** Merging + temporal compression, **trained**, lives between encoder and LLM as a dedicated temporal projector.
 
+**Skim path (if you only have 30 minutes):** §3 (Method — the three components: Mamba temporal projector, temporal compression, spatial compression) + Figure 1 (architecture). Then §5 results table — focus on the budget-vs-accuracy *curve*, not the absolute SOTA numbers.
+
 | Cell | Notes |
 |---|---|
 | **Problem** | Image-VLM-style architectures treat frames independently → no explicit temporal modeling, and the per-frame token explosion makes long-video impractical. |
@@ -36,6 +38,8 @@ For each paper, the spine is **problem → key idea → method → results → w
 **Citation:** Tao et al., *DyCoke*, CVPR 2025 — [arXiv:2411.15024](https://arxiv.org/abs/2411.15024). Code: [github.com/KD-TAO/DyCoke](https://github.com/KD-TAO/DyCoke).
 
 **Bucket:** Merging + KV-cache compression, **training-free**, in prefill *and* decode.
+
+**Skim path (if you only have 30 minutes):** §3 (Method — the two-stage pipeline: temporal token merging in prefill + dynamic KV-cache pruning in decode) + Figure 2 (which tokens get dropped where). The algorithm boxes are short — read them line by line. Skip §4 ablations on first pass.
 
 | Cell | Notes |
 |---|---|
@@ -54,6 +58,8 @@ For each paper, the spine is **problem → key idea → method → results → w
 
 **Bucket:** Pruning / selection, **training-free**, at the connector / early LLM boundary; CLIP-similarity-driven.
 
+**Skim path (if you only have 20 minutes):** §3 (Method — the CLIP-similarity scoring rule, ~2 pages) + the side-by-side table comparing TRIM vs. FastV and baselines. The whole paper is small, but the §3 procedure is the only thing you actually need to be able to discuss.
+
 | Cell | Notes |
 |---|---|
 | **Problem** | Most token-reduction methods either need fine-tuning or rely on a learned scorer; can we get FastV-quality results with even simpler ingredients? |
@@ -70,6 +76,8 @@ For each paper, the spine is **problem → key idea → method → results → w
 **Citation:** *Efficient Video Sampling: Pruning Temporally Redundant Tokens for Faster VLM Inference* — [arXiv:2510.14624](https://arxiv.org/abs/2510.14624).
 
 **Bucket:** Temporal pruning at the patch level, **training-free**, encoder-adjacent.
+
+**Skim path (if you only have 20 minutes):** §3 (Method — the static-patch detection rule with threshold *q*) + Figure 1 (what a "temporally static patch" looks like) + the §4 table showing TTFT speedup at different *q*. The intro alone gives you 70% of the paper.
 
 | Cell | Notes |
 |---|---|
@@ -88,6 +96,8 @@ For each paper, the spine is **problem → key idea → method → results → w
 
 **Bucket:** Adaptive frame sampling, **trained** (policy learned via RL-style reward), pre-encoder.
 
+**Skim path (if you only have 30 minutes):** §3 (Method — dual-agent design: CLIP retrieval agent + uniform agent) + §4 (the **behavior-aware reward function** — this is the novelty) + the headline table comparing frame budgets vs. accuracy. Skip the agent-tool implementation details; you mostly need the reward-function picture. Cross-link: this is where Module 01b's RL/GRPO content pays off.
+
 | Cell | Notes |
 |---|---|
 | **Problem** | Uniform / single-shot keyframe selection can't recover from poor early choices on long videos. We need a policy that can *call back* for more frames if it isn't sure yet. |
@@ -104,6 +114,8 @@ For each paper, the spine is **problem → key idea → method → results → w
 **Citation:** Liao et al., *VideoINSTA*, EMNLP Findings 2024 — [arXiv:2409.20365](https://arxiv.org/abs/2409.20365). Code: [github.com/mayhugotong/VideoINSTA](https://github.com/mayhugotong/VideoINSTA).
 
 **Bucket:** Text-conditioned spatio-temporal aggregation, **trained / agentic** (no fine-tune of the VLM itself, but builds an inference-time pipeline), zero-shot framework.
+
+**Skim path (if you only have 30 minutes):** §3 (Method — the three components: zero-shot framework, event-temporal + content-spatial reasoning, self-reflective sufficiency) + Figure 2 (the pipeline). The C-DPCKNN event-segmentation step is the technical core — everything else is orchestration logic. Compare its "sufficiency check" to VideoBrain's reward.
 
 | Cell | Notes |
 |---|---|

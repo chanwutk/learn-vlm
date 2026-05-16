@@ -6,7 +6,7 @@ This is the architectural core. Every token-reduction paper assumes a specific p
 
 ## Prerequisites
 
-Modules 01 (KV cache) and 02 (CLIP / SigLIP encoders).
+Modules 01 (KV cache), 01b (training pipelines — *especially* SFT / instruction tuning, since that's what visual instruction tuning is), and 02 (CLIP / SigLIP encoders).
 
 ## Learning path
 
@@ -38,7 +38,7 @@ Practical implications for token reduction:
 
 ### 2. Two-stage training (LLaVA recipe)
 
-Almost every open VLM uses some variant of this:
+This is the **VLM-specific bolt-on** to the LLM training stack from Module 01b. The "LLM side" (pre-training → SFT → preference alignment) all still happens — but two visual sub-stages are inserted *before* the LLM-side post-training kicks in. Almost every open VLM uses some variant of this:
 
 | Stage | Trainable | Data | Goal |
 |---|---|---|---|
@@ -48,7 +48,7 @@ Almost every open VLM uses some variant of this:
 Why this matters for token reduction: the projector is the *learned* boundary between modalities. Token reduction methods that operate before the projector behave like input compression; methods that operate after operate like activation pruning. Training-free methods that work inside the LLM (FastV) implicitly bet that the projector has *already* produced redundant tokens.
 
 - **Primary:** [LLaVA paper site](https://llava-vl.github.io/) — skim. The diagram + Table 1 (data composition) are the things to internalize.
-- **Go deeper:** Liu et al., *Visual Instruction Tuning*, NeurIPS 2023 — [arXiv:2304.08485](https://arxiv.org/abs/2304.08485).
+- **Go deeper:** Liu et al., *Visual Instruction Tuning*, NeurIPS 2023 — [arXiv:2304.08485](https://arxiv.org/abs/2304.08485). **Skim path:** §3 (GPT-4-generated instruction-data construction — the key trick) + §4 (two-stage training recipe) + Figure 1 (architecture). Skip the per-benchmark result tables on first pass.
 
 ### 3. The LLaVA family lineage
 
@@ -61,7 +61,7 @@ Why this matters for token reduction: the projector is the *learned* boundary be
 | **LLaVA-OneVision-1.5** | Open-data + cluster-discrimination encoder (RICE-ViT) instead of SigLIP/DFN. | Encoder swaps as the field evolves. |
 
 - **Primary:** [LLaVA-OneVision blog post](https://llava-vl.github.io/blog/2024-08-05-llava-onevision/) — covers OV's place in the lineage; skim.
-- **Go deeper:** Liu et al., *Improved Baselines with Visual Instruction Tuning (LLaVA-1.5)*, 2023 — [arXiv:2310.03744](https://arxiv.org/abs/2310.03744).
+- **Go deeper:** Liu et al., *Improved Baselines with Visual Instruction Tuning (LLaVA-1.5)*, 2023 — [arXiv:2310.03744](https://arxiv.org/abs/2310.03744). **Skim path:** §3 (what changed vs. LLaVA — 336px encoder, 2-layer MLP projector, more SFT data) + Table 1 (the recipe-level diff). Short paper; can read end-to-end in ~30 min.
 
 ### 4. The Qwen-VL family lineage
 
@@ -77,7 +77,8 @@ This is the lineage your manager's reading list points at via "Qwen 3.5 technica
 The pattern: across versions, the team migrated *toward* MLP-style merging (the LLaVA template won) and *added* dynamic-resolution + RoPE-axes-for-modality tricks.
 
 - **Primary:** [Qwen2.5-VL technical blog](https://qwenlm.github.io/blog/qwen2.5-vl/) — short, has the architecture diagram.
-- **Go deeper:** Bai et al., *Qwen-VL: A Versatile Vision-Language Model*, 2023 — [arXiv:2308.12966](https://arxiv.org/abs/2308.12966), then jump to Qwen Team, *Qwen2.5-VL Technical Report*, 2025 — [arXiv:2502.13923](https://arxiv.org/abs/2502.13923).
+- **Go deeper (start fundamental):** Bai et al., *Qwen-VL*, 2023 — [arXiv:2308.12966](https://arxiv.org/abs/2308.12966). **Skim path:** §3 (Methodology — the 3-stage training pipeline and the visual receptor design) + Figure 2 (architecture). Skip §4 benchmarks on first pass.
+- **Go deeper (then deltas):** Qwen Team, *Qwen2.5-VL Technical Report*, 2025 — [arXiv:2502.13923](https://arxiv.org/abs/2502.13923). **Skim path:** §3 (Architecture — window attention, 2D-RoPE, the MLP "merger") + §4 (training data and stages). The "what changed since Qwen2-VL" framing in §3 is the single highest-density part.
 
 ### 5. BLIP-2 and the Q-Former, in one read
 
@@ -88,7 +89,7 @@ You don't need the full BLIP-2 mechanics, just the Q-Former picture:
 - This is **architectural** token reduction — built into the connector.
 
 - **Primary:** [HuggingFace BLIP-2 blog](https://huggingface.co/blog/blip-2) — short.
-- **Go deeper:** Li et al., *BLIP-2*, ICML 2023 — [arXiv:2301.12597](https://arxiv.org/abs/2301.12597).
+- **Go deeper:** Li et al., *BLIP-2*, ICML 2023 — [arXiv:2301.12597](https://arxiv.org/abs/2301.12597). **Skim path:** §3 (Method — the two-stage Q-Former pretraining is the only thing you need) + Figure 2 (Q-Former architecture). Stage 1 is "representation learning", stage 2 is "generative learning"; understanding the *split* is the whole pedagogical point.
 
 InternVL is worth knowing exists: huge vision encoder (~6B) + MLP projector → LLM. Same template as LLaVA but with a heavyweight encoder.
 
