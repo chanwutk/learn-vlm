@@ -75,15 +75,13 @@ For brainstorming (goal #2): FastVLM stakes out one extreme — push compression
 
 ## Putting it together
 
-A useful mental table — three knobs you can turn at the encoder boundary:
+Three knobs at the encoder boundary. Every paper in this module is one or two of these turned.
 
 | Knob | Method | Trade-off |
 |---|---|---|
-| **Input image** | Higher resolution + tiling | More tokens, more detail. AnyRes / LLaVA-UHD. |
-| **Encoder architecture** | Hybrid / efficient encoder that natively emits fewer tokens | Less flexibility, but free at inference. FastVLM. |
-| **Connector-side compression** | Compress tokens between encoder and LLM | Plug-in; works on top of any encoder. LLaVA-UHD's compression module; many reading-list papers. |
-
-Each reading-list paper is one or two of these knobs turned.
+| **Input image** | Higher resolution + tiling | More tokens, more detail. AnyRes, LLaVA-UHD. |
+| **Encoder architecture** | Hybrid / efficient encoder, natively emits fewer tokens | Less flexibility; free at inference. FastVLM. |
+| **Connector-side compression** | Compress tokens between encoder and LLM | Plug-in; stacks on any encoder. LLaVA-UHD compressor, most Module-07 papers. |
 
 ## Self-check
 
@@ -99,8 +97,6 @@ Each reading-list paper is one or two of these knobs turned.
 
 ## References
 
-- Zhai et al., *SigLIP*, 2023 — arXiv:2303.15343 (also in Module 02).
+- Zhai et al., *SigLIP*, 2023 — arXiv:2303.15343 (also Module 02).
 - Xu et al., *LLaVA-UHD*, ECCV 2024 — arXiv:2403.11703.
-- Xu et al., *LLaVA-UHD v2*, 2024 — arXiv:2412.13871.
 - Vasu et al., *FastVLM*, CVPR 2025 — arXiv:2412.13303.
-- LLaVA-NeXT team blog, *Improved reasoning, OCR, and world knowledge*, Jan 2024 (no arXiv; see references in Module 03).

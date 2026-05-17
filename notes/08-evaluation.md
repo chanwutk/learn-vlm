@@ -44,16 +44,12 @@ Token-reduction papers report along three axes (sometimes four). When reading a 
 
 A practical heuristic: **TTFT improvements are easy to game** (you can change batch size, hardware, framework). Token-count improvements are reproducible. When in doubt, trust the token-count number and look at the absolute hardware setup before believing a TTFT number.
 
-### 3. The two patterns of "winning"
+### 3. Two patterns of "winning"
 
-Pattern A: **Pareto improvement.** Same accuracy, fewer tokens / faster / less memory. Easy to celebrate; rare to find without an asterisk.
-
-Pattern B: **Trade-off slider.** A knob (e.g., keep-ratio) that lets you smoothly choose accuracy vs. cost. Most reading-list papers report a *curve* across keep-ratios. The interesting question is the *shape* of the curve: where does it start dropping off?
-
-When you discuss a paper, look at the **knees** of the curve — the point where accuracy starts collapsing. The interesting research questions usually live near the knee, not at the safe Pareto-improvement end.
-
-- **Primary:** [Breaking Down Video LLM Benchmarks (recent survey)](https://arxiv.org/pdf/2505.14321) — sections on what each benchmark measures.
-- **Go deeper:** Read the results sections of any two Module-07 papers side by side. Are they reporting at the same keep-ratio? On the same backbone? If not, the comparison is partially apples-to-oranges.
+| Pattern | What it claims | Where to look |
+|---|---|---|
+| **Pareto improvement** | Same accuracy, less cost (fewer tokens / faster / less memory). | Rare without an asterisk — check the baseline carefully. |
+| **Trade-off slider** | A knob (keep-ratio) that smoothly trades accuracy for cost. | The **knee** of the curve — where accuracy starts collapsing. Research questions live near the knee, not at the safe end. |
 
 ## Self-check
 

@@ -2,7 +2,7 @@
 
 ## Why this matters
 
-Your internship is on **video** token reduction. The high-resolution problem from Module 04 was bad enough; video makes it dramatically worse — every second of video adds another image worth of tokens. This module gives you (a) the math of why it's hopeless to just feed frames in naively, (b) the standard architectural patterns for video VLMs, and (c) frame-sampling tricks that every modern paper assumes are in place before its method kicks in.
+Video makes Module 04's token-explosion problem dramatically worse — every second adds another image's worth of tokens. This module gives you (a) the math of why naive frame-stacking is hopeless, (b) the standard video-VLM patterns, and (c) frame-sampling tricks every Module 07 paper assumes are already in place.
 
 ## Prerequisites
 
@@ -32,8 +32,7 @@ Standard approaches, from crudest to smartest:
 
 **Why it matters:** every other technique downstream assumes a *good enough* set of frames. Bad sampling = no amount of clever token compression can recover the dropped information.
 
-- **Primary:** [Adaptive Keyframe Sampling — CVPR 2025 paper PDF](https://openaccess.thecvf.com/content/CVPR2025/papers/Tang_Adaptive_Keyframe_Sampling_for_Long_Video_Understanding_CVPR_2025_paper.pdf) — short, has the comparison table. Skim §3 + the results table.
-- **Go deeper:** Tang et al., *Video Understanding with Large Language Models: A Survey* — [arXiv:2312.17432](https://arxiv.org/abs/2312.17432). The frame-sampling and architecture sections give the field's history.
+- **Primary:** Tang et al., *Video Understanding with Large Language Models: A Survey* — [arXiv:2312.17432](https://arxiv.org/abs/2312.17432). Skim the **frame-sampling** and **architecture** sections only — gives the lay of the land in 20–30 min.
 
 ### 2. Per-frame encoding and temporal modeling
 
@@ -52,22 +51,23 @@ Reuse from Module 03: most video VLMs are just an image VLM with a frame loop bo
 - **Primary:** [HuggingFace Video-LLaVA docs](https://huggingface.co/docs/transformers/main/model_doc/video_llava) — quick read of the architecture.
 - **Go deeper:** Lin et al., *Video-LLaVA*, 2023 — [arXiv:2311.10122](https://arxiv.org/abs/2311.10122). Quick: §3 (architecture) is what matters.
 
-### 3. The token-explosion picture (revisited, with video numbers)
-
-Plug some numbers in to feel the wall:
+### 3. Token-explosion math, in numbers
 
 ```
-Setup:                          per-frame    × frames    = total
-  Video-ChatGPT (avg-pool)        100         × 100       =    10 000
-  Video-LLaVA (8 frames, full)    576         ×   8       =     4 608
-  LLaVA-OneVision-Video (196/fr)  196         ×  32       =     6 272
-  AnyRes-ish per frame            2 880       ×  32       =    92 160   ← infeasible
-  Long-video benchmark target     ~32 frames over a 10-min video — clearly need help.
+Setup                                per-frame   × frames   = total
+  Video-ChatGPT (avg-pool)             100        × 100      =   10 000
+  Video-LLaVA (8 frames, full)         576        ×   8      =    4 608
+  LLaVA-OneVision-Video (196/frame)    196        ×  32      =    6 272
+  AnyRes-ish per frame                 2 880      ×  32      =   92 160   ← infeasible
+  Long-video benchmark target          ~32 frames over a 10-min video — clearly need help.
 ```
 
-The reading-list papers in Module 07 essentially target **two regimes:**
-- *Mid* video: how to fit a 30-frame video into a single forward pass without quality loss (DyCoke, "Less is More", STORM).
-- *Long* video: how to find the right ~30 frames in the first place (VideoBrain, Efficient Video Sampling, VideoINSTA).
+### 4. The two regimes the reading list attacks
+
+| Regime | Goal | Reading-list papers |
+|---|---|---|
+| **Mid video** | Fit a 30-frame video into one forward pass without quality loss. | DyCoke, "Less is More", STORM |
+| **Long video** | Find the right ~30 frames in the first place. | VideoBrain, Efficient Video Sampling, VideoINSTA |
 
 ## Self-check
 
@@ -84,7 +84,4 @@ The reading-list papers in Module 07 essentially target **two regimes:**
 ## References
 
 - Lin et al., *Video-LLaVA*, 2023 — arXiv:2311.10122.
-- Zhang et al., *Video-LLaMA*, EMNLP 2023 (demo) — arXiv:2306.02858.
-- Maaz et al., *Video-ChatGPT*, 2023 — arXiv:2306.05424.
 - Tang et al., *Video Understanding with Large Language Models: A Survey* — arXiv:2312.17432.
-- Tang et al., *Adaptive Keyframe Sampling*, CVPR 2025 — (see openaccess.thecvf.com link above).

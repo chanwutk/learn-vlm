@@ -63,27 +63,25 @@ The interesting structural point: VisionZip is purely *encoder-side* — it make
 - **Primary:** [VisionZip GitHub repo (project page)](https://github.com/dvlab-research/VisionZip) — README with figures.
 - **Go deeper:** Yang et al., *VisionZip*, CVPR 2025 — [arXiv:2412.04467](https://arxiv.org/abs/2412.04467).
 
-### 5. KV-cache compression (H2O, StreamingLLM)
+### 5. KV-cache compression — H2O + StreamingLLM
 
-These are LLM-side techniques developed for text-only models, but they apply directly to VLMs at decode time.
-- **H2O — Heavy-Hitter Oracle:** At each decode step, keep the tokens that have accumulated the most attention so far ("heavy hitters") plus a recency window. The accumulated-attention distribution is a power law, so a small set dominates. Result: keep ~20% of the cache with minimal loss.
-- **StreamingLLM:** Notice that the very first few tokens act as "attention sinks" — the model dumps probability mass on them. Keep those + the recent window; evict the middle. Lets you decode arbitrarily long with bounded cache.
+Two LLM-side techniques that apply directly to VLM decode. You don't need to read the papers; just know what they do because **DyCoke (Module 07) is essentially "ToMe-merge at prefill + KV-cache eviction at decode" — these are the ideas it builds on.**
 
-For VLMs, these methods kick in *during decoding* — they're complementary to encoder-side reduction. DyCoke explicitly combines a ToMe-style prefill merge with KV-cache eviction at decode (Module 07).
+| Method | What it keeps | What it evicts | Result |
+|---|---|---|---|
+| **H2O** | "Heavy hitters" (tokens that accumulated the most attention so far — distribution is power-law) + recency window | The rest | ~20% of cache, minimal loss |
+| **StreamingLLM** | First few tokens (act as "attention sinks" — model dumps mass on them) + recent window | The middle | Bounded cache, infinite decode |
 
-- **Primary:** [Top 10 KV Cache Compression Techniques (MarkTechPost)](https://www.marktechpost.com/2026/04/29/top-10-kv-cache-compression-techniques-for-llm-inference-reducing-memory-overhead-across-eviction-quantization-and-low-rank-methods/) — short survey, gives you the landscape.
-- **Go deeper:** Zhang et al., *H2O*, NeurIPS 2023 — [arXiv:2306.14048](https://arxiv.org/abs/2306.14048). Xiao et al., *StreamingLLM*, ICLR 2024 — [arXiv:2309.17453](https://arxiv.org/abs/2309.17453).
-
-### 6. Training-free vs trained — when to use which
+### 6. Training-free vs trained
 
 | Property | Training-free | Trained |
 |---|---|---|
-| Cost to deploy | Plug in. | Need a fine-tune pass. |
-| Coupling | Loosely coupled — works on any LLaVA-likeish model. | Tightly coupled to the host model. |
-| Performance ceiling | Limited by how lucky the pretrained model's attention pattern is. | Higher, especially at extreme reduction (≤10% of tokens). |
-| Reading-list examples | FastV, ToMe, DyCoke, "Less is More", VisionZip, ESV | VideoBrain, VideoINSTA, STORM, LLaVA-UHD's compressor |
+| Deploy cost | Plug in. | Need fine-tune pass. |
+| Coupling | Loose — works on any LLaVA-likeish model. | Tight to the host model. |
+| Performance ceiling | Limited by the pretrained attention pattern. | Higher, esp. at extreme reduction (≤10% tokens). |
+| Reading-list examples | FastV, ToMe, DyCoke, "Less is More", VisionZip, ESV | STORM, VideoBrain, VideoINSTA, LLaVA-UHD compressor |
 
-A good research seed for goal #2: **a training-free policy that adapts at inference based on the question** (text-conditioned but no fine-tune). The reading list has hints of this already; combining ideas across cells of this table is where novelty lives.
+Brainstorm seed (goal #2): **a training-free policy that adapts at inference based on the question** — text-conditioned but no fine-tune. The reading list hints at this, no one fully cashes it in.
 
 ## Code exercise — ToMe merge + FastV prune in ~30 lines
 

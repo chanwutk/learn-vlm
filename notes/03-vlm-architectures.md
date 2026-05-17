@@ -55,13 +55,12 @@ Why this matters for token reduction: the projector is the *learned* boundary be
 | Version | What changed | Why |
 |---|---|---|
 | **LLaVA** (NeurIPS 2023) | First MLP-projector + visual-instruction-tuning recipe. ViT-L/14 @ 224. | Establishes the template. |
-| **LLaVA-1.5** | ViT-L/14 @ **336**, larger projector (2-layer MLP), more instruction data. | Bigger encoder = more spatial detail. **Token count: 576.** |
-| **LLaVA-NeXT (1.6)** | **AnyRes**: split a high-res image into multiple 336-tiles, encode each. Higher OCR / detail performance. **Token count: up to 2880.** | Token-explosion problem becomes acute → motivates Module 04. |
-| **LLaVA-OneVision** | Same family extended to multi-image and video. Per-frame 196 tokens. | Same architectural ideas, video-ified. |
-| **LLaVA-OneVision-1.5** | Open-data + cluster-discrimination encoder (RICE-ViT) instead of SigLIP/DFN. | Encoder swaps as the field evolves. |
+| **LLaVA-1.5** | ViT-L/14 @ **336**, 2-layer MLP projector, more instruction data. **Token count: 576.** | Bigger encoder = more spatial detail. |
+| **LLaVA-NeXT (1.6)** | **AnyRes**: split a high-res image into multiple 336-tiles. **Token count: up to 2880.** | Token-explosion problem → motivates Module 04. |
 
-- **Primary:** [LLaVA-OneVision blog post](https://llava-vl.github.io/blog/2024-08-05-llava-onevision/) — covers OV's place in the lineage; skim.
-- **Go deeper:** Liu et al., *Improved Baselines with Visual Instruction Tuning (LLaVA-1.5)*, 2023 — [arXiv:2310.03744](https://arxiv.org/abs/2310.03744). **Skim path:** §3 (what changed vs. LLaVA — 336px encoder, 2-layer MLP projector, more SFT data) + Table 1 (the recipe-level diff). Short paper; can read end-to-end in ~30 min.
+LLaVA-OneVision (multi-image/video) and OV-1.5 (RICE-ViT encoder) exist but aren't in the reading list — names worth recognizing, no need to dig in.
+
+- **Go deeper:** Liu et al., *LLaVA-1.5*, 2023 — [arXiv:2310.03744](https://arxiv.org/abs/2310.03744). **Skim path:** §3 + Table 1. Short paper, ~30 min end-to-end.
 
 ### 4. The Qwen-VL family lineage
 
@@ -69,12 +68,11 @@ This is the lineage your manager's reading list points at via "Qwen 3.5 technica
 
 | Version | What changed | Why |
 |---|---|---|
-| **Qwen-VL** (Aug 2023) | Custom Vision Receptor + cross-attention adapter. 3-stage training: pretrain → multi-task pretrain → SFT. Adds grounding / OCR via box-coordinates in text. | Establishes the lineage; first widely-used non-LLaVA open VLM. |
-| **Qwen2-VL** (Sep 2024) | **M-RoPE** (Multimodal RoPE) encoding (time, height, width) separately; native dynamic-resolution ViT. | Lets the model handle variable image sizes without resizing. |
-| **Qwen2.5-VL** (Feb 2025) | Custom ViT with **2D-RoPE + window attention**; simple **MLP-based "vision-language merger"** (back to LLaVA-style). Pretrained at native variable resolution. | Reduces ViT compute cost; merger handles the long-feature problem. |
-| **Qwen3-VL** (2025+) | Latest release; iterates on the merger and training data. | Field velocity. |
+| **Qwen-VL** (Aug 2023) | Custom vision receptor + cross-attention adapter. 3-stage training. Grounding/OCR via box-coordinates in text. | Establishes the lineage. |
+| **Qwen2-VL** (Sep 2024) | **M-RoPE** encoding (time, height, width); native dynamic-resolution ViT. | Variable image sizes without resizing. |
+| **Qwen2.5-VL** (Feb 2025) | 2D-RoPE + window attention in the ViT; **MLP-based merger** (back to LLaVA-style). | Cheaper ViT; merger handles long-feature problem. |
 
-The pattern: across versions, the team migrated *toward* MLP-style merging (the LLaVA template won) and *added* dynamic-resolution + RoPE-axes-for-modality tricks.
+Across versions: migrated *toward* MLP-style merging (LLaVA template won) and *added* dynamic-resolution + RoPE-axes-for-modality tricks.
 
 - **Primary:** [Qwen2.5-VL technical blog](https://qwenlm.github.io/blog/qwen2.5-vl/) — short, has the architecture diagram.
 - **Go deeper (start fundamental):** Bai et al., *Qwen-VL*, 2023 — [arXiv:2308.12966](https://arxiv.org/abs/2308.12966). **Skim path:** §3 (Methodology — the 3-stage training pipeline and the visual receptor design) + Figure 2 (architecture). Skip §4 benchmarks on first pass.
@@ -88,10 +86,9 @@ You don't need the full BLIP-2 mechanics, just the Q-Former picture:
 - Outputs exactly N visual tokens regardless of image size.
 - This is **architectural** token reduction — built into the connector.
 
-- **Primary:** [HuggingFace BLIP-2 blog](https://huggingface.co/blog/blip-2) — short.
-- **Go deeper:** Li et al., *BLIP-2*, ICML 2023 — [arXiv:2301.12597](https://arxiv.org/abs/2301.12597). **Skim path:** §3 (Method — the two-stage Q-Former pretraining is the only thing you need) + Figure 2 (Q-Former architecture). Stage 1 is "representation learning", stage 2 is "generative learning"; understanding the *split* is the whole pedagogical point.
+- **Primary:** [HuggingFace BLIP-2 blog](https://huggingface.co/blog/blip-2) — short read; only open the paper if the blog leaves something unclear.
 
-InternVL is worth knowing exists: huge vision encoder (~6B) + MLP projector → LLM. Same template as LLaVA but with a heavyweight encoder.
+InternVL is worth knowing exists: huge vision encoder (~6B) + MLP projector → LLM. Same template as LLaVA but with a heavyweight encoder. No need to read.
 
 ## Code exercise — a minimal VLM forward pass (shapes only)
 
@@ -148,11 +145,8 @@ After running, sit with the last line: **~98% of the LLM input is visual.** Halv
 
 ## References
 
-- Liu et al., *Visual Instruction Tuning (LLaVA)*, NeurIPS 2023 — arXiv:2304.08485.
-- Liu et al., *Improved Baselines with Visual Instruction Tuning (LLaVA-1.5)*, 2023 — arXiv:2310.03744.
-- Li et al., *LLaVA-OneVision*, 2024 — arXiv:2408.03326.
+- Liu et al., *LLaVA*, NeurIPS 2023 — arXiv:2304.08485.
+- Liu et al., *LLaVA-1.5*, 2023 — arXiv:2310.03744.
 - Bai et al., *Qwen-VL*, 2023 — arXiv:2308.12966.
-- Wang et al., *Qwen2-VL*, 2024 — arXiv:2409.12191.
 - Qwen Team, *Qwen2.5-VL Technical Report*, 2025 — arXiv:2502.13923.
 - Li et al., *BLIP-2*, ICML 2023 — arXiv:2301.12597.
-- Alayrac et al., *Flamingo*, NeurIPS 2022 — arXiv:2204.14198.

@@ -60,6 +60,32 @@ Modules **01, 03, 06** each contain a ~30-line PyTorch code exercise. The rest a
 
 ---
 
+## If you're falling behind — the minimum viable path
+
+You'll probably skip something. Here's the priority order so you skip the *right* things.
+
+**Spine (cannot cut, this is the conversation with your manager):**
+- **07 Reading deep dives** — these *are* the reading list.
+- **06 Token-reduction toolbox** — every reading-list paper builds on FastV and ToMe.
+- **04 High-res encoding** — three reading-list papers live here (SigLIP, LLaVA-UHD, FastVLM).
+- **03 VLM architectures** — needed to read LLaVA + Qwen-VL.
+- **00 Orientation** — 1 hour; sets your mental map so 07 isn't terrifying.
+
+**Cuttable in this order, if forced (shed the *bottom* first):**
+1. **08 Evaluation** → 30-min skim of the benchmark table only.
+2. **02 Vision encoders** → you know CLIP basics; skip the file, just read SigLIP's §3 directly.
+3. **05 Video VLMs** → skim the token-count math + "two regimes" sections only.
+4. **01b Training pipelines** → defer until you hit a paper using DPO/GRPO; the Karpathy chapters cover it in 75 min on demand.
+5. **01 LLM internals** → if you already understand KV cache, the rest is reference.
+
+**Paper priority within the 11:**
+- 🔴 **Must read carefully** (manager will ask): all 6 Module-07 papers, LLaVA-UHD, FastVLM.
+- 🟡 **Skim by skim path** (recognize, not reproduce): CLIP, LLaVA, Qwen-VL, SigLIP.
+
+If today is May 30 and you've done nothing: read Module 00 (1 hr), then jump to Module 07 with skim paths. Better than no map at all.
+
+---
+
 ## Progress tracker
 
 Modules:
