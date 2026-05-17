@@ -22,6 +22,35 @@ For each paper, the spine is **problem → key idea → method → results → w
 
 **Skim path (if you only have 30 minutes):** §3 (Method — the three components: Mamba temporal projector, temporal compression, spatial compression) + Figure 1 (architecture). Then §5 results table — focus on the budget-vs-accuracy *curve*, not the absolute SOTA numbers.
 
+#### Quick detour: what's Mamba / SSM?
+
+You'll hit "Mamba-based temporal projector" in STORM. Mamba is a **State Space Model (SSM)** — a sequence model that's an alternative to attention. The picture:
+
+```
+   Attention (Transformer)            SSM (Mamba)
+   --------------------------         --------------------------
+   For each token, look at all        Maintain a hidden state h_t
+   previous tokens via Q·K^T.         that updates recurrently:
+                                          h_t = Ā h_{t-1} + B̄ x_t
+   Cost: O(T²) compute,                   y_t = C h_t
+         O(T) KV cache.              Cost: O(T) compute, O(1) state.
+
+                                     "Selective" (Mamba):
+                                     Ā, B̄ become input-dependent so
+                                     the model can *choose* what to
+                                     keep in state vs. forget.
+```
+
+| | Attention | Mamba (SSM) |
+|---|---|---|
+| Sequence-length scaling | Quadratic compute, linear memory | Linear compute, constant memory |
+| Long-range expressivity | Strong — can attend anywhere | Strong if the selection mechanism is good (the Mamba contribution) |
+| Trained? | Yes | Yes — different architecture, same loss types |
+
+**Why STORM uses it:** the temporal sequence of frame tokens is *long*. Attention over hundreds of frames is brutally expensive. A Mamba-based temporal projector integrates information across many frames *linearly*, then hands a compressed summary to the (still-attention-based) LLM.
+
+You don't need to read the Mamba paper, but if curious: Gu & Dao, *Mamba: Linear-Time Sequence Modeling with Selective State Spaces*, 2023 — [arXiv:2312.00752](https://arxiv.org/abs/2312.00752). **5-min skim:** §1 + Figure 1 only.
+
 | Cell | Notes |
 |---|---|
 | **Problem** | Image-VLM-style architectures treat frames independently → no explicit temporal modeling, and the per-frame token explosion makes long-video impractical. |
